@@ -12,6 +12,8 @@
 #include <glm/gtx/transform.hpp>
 #include <glm/gtx/quaternion.hpp>
 
+class Window;
+class View;
 
 #include "model.hpp"
 
@@ -35,5 +37,8 @@ class Drawable
     GLuint program;
 
     glm::vec3 position, rotation, scale{1.0f,1.0f,1.0f};
+
+    friend class Window;
+    friend class View;
 
 };

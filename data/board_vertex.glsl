@@ -10,6 +10,7 @@ uniform mat4 M;
 out vec3 vertexPosition_worldspace;
 out vec3 Normal_cameraspace;
 out vec3 LightDirection_cameraspace;
+out vec3 position_modelspace;
 
 out struct Light
 {
@@ -20,6 +21,7 @@ out struct Light
 void main()
 {
   gl_Position = P * V * M * vec4(vertexPosition_modelspace,1);
+  position_modelspace = vertexPosition_modelspace;
 
   vertexPosition_worldspace = (P*V*M*vec4(vertexPosition_modelspace,1)).xyz;
   vec3 vertexPosition_cameraspace = (V*M*vec4(vertexPosition_modelspace,1)).xyz;

@@ -1,5 +1,8 @@
 #include "model.hpp"
 #include "glm/glm.hpp"
+  
+#define vert_add(a,b,c) { m->vertices.push_back(a); m->vertices.push_back(b); m->vertices.push_back(c); }
+#define norm_add(a,b,c) { m->normals.push_back(a);  m->normals.push_back(b);  m->normals.push_back(c); }
 
 Model::Model()
 {}
@@ -32,7 +35,7 @@ void Model::draw()
   glDisableVertexAttribArray(0);
 }
  
-Model *Model::generatePawn()
+Model *Model::generatePawn(uint32_t sides, double shrink)
 {
   Model *m = new Model();
 
@@ -45,12 +48,10 @@ Model *Model::generatePawn()
   for (const auto &v : g_vertex_buffer_data) { m->vertices.push_back(v); };
   */
 
-  #define vert_add(a,b,c) { m->vertices.push_back(a); m->vertices.push_back(b); m->vertices.push_back(c); }
-  #define norm_add(a,b,c) { m->normals.push_back(a); m->normals.push_back(b); m->normals.push_back(c); }
+  const int SIDES = sides;
+  const double ANGLE = 2*M_PI/SIDES;
+  const double SHRINK = shrink;
 
-  const int SIDES = 160;
-  double ANGLE = 2*M_PI/SIDES;
-  double SHRINK = 1.2;
   for (int i = 0; i < SIDES; ++i)
   {
     int i2 = (i+1)%SIDES;
@@ -77,11 +78,38 @@ Model *Model::generatePawn()
     norm_add(cos(ANGLE*i+M_PI/2), 0.0f, sin(ANGLE*i+M_PI/2));
 
     norm_add(0.0f, 1.0f, 0.0f);
-    norm_add(cos(ANGLE*i+M_PI/2), 0.4f, sin(ANGLE*i+M_PI/2));
-    norm_add(cos(ANGLE*i+M_PI/2), 0.4f, sin(ANGLE*i+M_PI/2));
+    norm_add(cos(ANGLE*i+M_PI/2), 0.46f, sin(ANGLE*i+M_PI/2));
+    norm_add(cos(ANGLE*i+M_PI/2), 0.46f, sin(ANGLE*i+M_PI/2));
   }
 
   
   m->generateVertexBuffer();
+  return m;
+}
+
+
+Model *Model::generatePlane(float width, float height)
+{
+  Model *m = new Model();
+
+  vert_add(-width/2, 0, -height/2); // left-down
+  vert_add(-width/2, 0,  height/2); // left-up
+  vert_add( width/2, 0,  height/2); // right-up
+  
+  vert_add(-width/2, 0, -height/2); // left-down
+  vert_add( width/2, 0, -height/2); // right-down
+  vert_add( width/2, 0,  height/2); // right-up
+
+  norm_add(0.0f, 1.0f, 0.0f);
+  norm_add(0.0f, 1.0f, 0.0f);
+  norm_add(0.0f, 1.0f, 0.0f);
+  norm_add(0.0f, 1.0f, 0.0f);
+  norm_add(0.0f, 1.0f, 0.0f);
+  norm_add(0.0f, 1.0f, 0.0f);
+
+  for (const auto &v : m->vertices) printf("%f ", v);
+
+  m->generateVertexBuffer();
+
   return m;
 }

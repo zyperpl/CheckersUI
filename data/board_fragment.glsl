@@ -1,9 +1,10 @@
 #version 330 core
 
-out vec3 color;
+out vec4 color;
 
 in vec3 vertexPosition_worldspace;
 in vec3 Normal_cameraspace;
+in vec3 position_modelspace;
 
 in struct Light
 {
@@ -11,7 +12,9 @@ in struct Light
   vec3 direction;
 } light;
 
-uniform vec3 pawnColor;
+float a = 1.0;
+float b = 3.1415/2.;
+uniform float contrast;
 
 void main()
 {
@@ -22,7 +25,9 @@ void main()
 
   float cosTheta = clamp(dot(n,l), 0.0, 1.0);
 
-  vec3 ambientColor = vec3(0.03,0.03,0.03) + pawnColor/4.0;
-  vec3 modelColor = ambientColor + pawnColor*cosTheta/pow(dist,2)*360;
-  color = modelColor;
+  vec3 fieldColor = vec3(1.0,1.0,1.0) 
+    * ((cos((a+position_modelspace.z)*b))*(cos((a+position_modelspace.x)*b)))*contrast;
+
+  vec3 modelColor = vec3(0.2,0.2,0.2)*cosTheta/pow(dist,2)*200;
+  color = vec4(modelColor*fieldColor, 0.1);
 }

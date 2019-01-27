@@ -1,14 +1,22 @@
 #include "model.hpp"
 #include "pawn.hpp"
 
+
 Pawn::Pawn(glm::vec3 pos, Color c) :
     color{c}
 {
   this->position = pos;
+  this->target = pos;
+  this->rotation = glm::vec3(0,0,0);
+  this->scale = glm::vec3(0.8,1.0,0.8);
 
-  this->model.reset(Model::generatePawn());
-  this->program = ShaderManager::getProgram(2, "data/pawn_vertex.glsl", GL_VERTEX_SHADER,
-                                              "data/pawn_fragment.glsl", GL_FRAGMENT_SHADER);
+  uint32_t sides = 100+rand()%256;
+  double shrink  = 0.9+((double)(rand()%100)/100.0);
+
+  this->model.reset(Model::generatePawn(sides, shrink));
+  //printf("%d %f\n", sides, shrink);
+  this->program = ShaderManager::getProgram(2, "data/pawn_vertex.glsl",   GL_VERTEX_SHADER,
+                                               "data/pawn_fragment.glsl", GL_FRAGMENT_SHADER);
 }
 
 void Pawn::draw(glm::mat4 projection, glm::mat4 view)
@@ -29,4 +37,20 @@ void Pawn::draw(glm::mat4 projection, glm::mat4 view)
   glUniform3f(pawnColorID, color.r, color.g, color.b);
 
   this->model->draw();
+}
+
+void Pawn::update(float dt)
+{
+  float speed = glm::distance2(target,position)/1000.0;
+  if (speed > .005) speed = .005;
+  if (speed < 0.000001) position = target;
+  if (speed < 0.001) speed = 0.001;
+
+  //position.y = speed*100;
+
+  if (target.x < position.x) position.x -= speed*dt; 
+  if (target.x > position.x) position.x += speed*dt; 
+
+  if (target.z < position.z) position.z -= speed*dt; 
+  if (target.z > position.z) position.z += speed*dt; 
 }

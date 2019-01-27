@@ -14,7 +14,15 @@ class Model
     Model();
     void draw();
 
-    static Model *generatePawn();
+    /*
+     *  Creates rounded piece staying upward on OY axis.
+     */
+    static Model *generatePawn(uint32_t sides = 8, double shrink = 1.2);
+
+    /*
+     *  Creates flat plane laying on XOZ.
+     */
+    static Model *generatePlane(float width, float height);
   protected:
     GLuint vertexBuffer, normalBuffer;
 
