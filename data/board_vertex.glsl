@@ -23,7 +23,7 @@ void main()
   gl_Position = P * V * M * vec4(vertexPosition_modelspace,1);
   position_modelspace = vertexPosition_modelspace;
 
-  vertexPosition_worldspace = (P*V*M*vec4(vertexPosition_modelspace,1)).xyz;
+  vertexPosition_worldspace = (M*vec4(vertexPosition_modelspace,1)).xyz;
   vec3 vertexPosition_cameraspace = (V*M*vec4(vertexPosition_modelspace,1)).xyz;
 
   Normal_cameraspace = (V * M * vec4(vertexNormal_modelspace,0)).xyz;

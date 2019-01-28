@@ -89,16 +89,19 @@ glm::vec2 View::cast(glm::vec2 mousePosition, glm::vec2 screenSize)
 
     if (pos.y < 0)
     {
+      board->selected = {pos.x,pos.z};
+      printf("%f %f -> ", pos.x, pos.z);
+
       //drawables[1]->position = pos;
       //printf("%6.2f %6.2f %6.2f\n", pos.x, pos.y, pos.z);
       cx = round((ceil(pos.x)+10)/20*10)-1;
       cz = round((ceil(pos.z)+10)/20*10)-1;
 
-      //printf("%d %d\n", cx, cz);
+      printf("%d %d\n", cx, cz);
       break;
     }
   }
-  
+
   return {cx,cz};
 }
 

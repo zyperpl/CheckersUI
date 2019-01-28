@@ -2,6 +2,7 @@
 #include "view.hpp"
 #include "model.hpp"
 #include "board.hpp"
+#include "pawn.hpp"
 
 #include <cstdio>
 #include <cstdlib>
@@ -107,13 +108,22 @@ void Window::update(double deltaTime, View &view)
 
 
   Pawn *selected = view.getPawn(selectedBoardCoord);
+  if (selected)
+  {
+    selected->acolor = { 0.1, 0.9, 0.5 };  
+  }
+
   if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT))
   {
     if (Pawn *currentPawn = view.getPawn(currentBoardCoord))
     {
       // place already occupied
-      // item select
-      selectedBoardCoord = currentBoardCoord;
+      
+      if (!currentPawn->moving)
+      {
+        // item select
+        selectedBoardCoord = currentBoardCoord;
+      }
     } else
     {
       // place is empty

@@ -3,7 +3,7 @@
 
 
 Pawn::Pawn(glm::vec3 pos, Color c) :
-    color{c}
+    acolor{c}, color{c}
 {
   this->position = pos;
   this->target = pos;
@@ -34,16 +34,20 @@ void Pawn::draw(glm::mat4 projection, glm::mat4 view)
   glUniformMatrix4fv(mID, 1, GL_FALSE, &m[0][0]);
   
   GLuint pawnColorID = glGetUniformLocation(program, "pawnColor");
-  glUniform3f(pawnColorID, color.r, color.g, color.b);
+  glUniform3f(pawnColorID, acolor.r, acolor.g, acolor.b);
 
   this->model->draw();
+
+  acolor = color;
 }
 
 void Pawn::update(float dt)
 {
+  moving = false; 
+
   float speed = glm::distance2(target,position)/1000.0;
   if (speed > .005) speed = .005;
-  if (speed < 0.000001) position = target;
+  if (speed < 0.000001) { position = target; return; }
   if (speed < 0.001) speed = 0.001;
 
   //position.y = speed*100;
@@ -53,4 +57,6 @@ void Pawn::update(float dt)
 
   if (target.z < position.z) position.z -= speed*dt; 
   if (target.z > position.z) position.z += speed*dt; 
+
+  moving = true;
 }

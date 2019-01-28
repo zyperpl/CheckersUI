@@ -21,6 +21,8 @@ class Pawn : public Drawable
     }
 
     void update(float dt);
+    Color acolor{255,0,0};
+    bool moving{false};
   private:
     Color color{255,0,0};
     glm::vec3 target;

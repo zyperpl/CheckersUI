@@ -32,6 +32,9 @@ void Board::draw(glm::mat4 projection, glm::mat4 view)
   GLuint cID = glGetUniformLocation(program, "contrast");
   glUniform1f(cID, Board::contrast);
 
+  GLuint selID = glGetUniformLocation(program, "selected");
+  glUniform2fv(selID, 1, &selected[0]);
+
   
   this->model->draw();
 }
